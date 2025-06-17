@@ -7,6 +7,6 @@
    Implement exception handling to manage invalid operations, such as
    overdrafts, negative transactions, and non-existent accounts# INTERNSHIP-25
 
-   Addthe following dependencies:
+Add the following dependencies:
  i) Apache Log4j SLF4J Binding
  ii) Apache Commons CLI
