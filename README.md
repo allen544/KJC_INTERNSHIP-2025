@@ -8,5 +8,6 @@
    overdrafts, negative transactions, and non-existent accounts# INTERNSHIP-25
 
 Add the following dependencies:
- i) Apache Log4j SLF4J Binding
+ i) Apache Log4j SLF4J Binding 
+ 
  ii) Apache Commons CLI
