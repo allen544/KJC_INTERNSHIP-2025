@@ -1,3 +1,5 @@
+
+DAY-2
 1. Design a Java program that models a library management system. Your
    program should include a base class named Book and subclasses for specific
    types of books, such as FictionBook and NonFictionBook. (Inheritance)
@@ -12,3 +14,7 @@ Add the following dependencies:
  i) Apache Log4j SLF4J Binding 
  
  ii) Apache Commons CLI
+
+
+ DAY-3
+ 
