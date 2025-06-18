@@ -19,7 +19,7 @@ Add the following dependencies:
 
  #DAY-3
  Database Tables
-/n  Enrollment details
+ Enrollment details
  ![Day-3  monogo databse](https://github.com/user-attachments/assets/d091843e-aab3-4fa7-8001-336b35321414)
  Student details
  ![Day-3  monogo databse-2](https://github.com/user-attachments/assets/06d2dc68-edcf-44c4-a9a2-14a929c20b24)
