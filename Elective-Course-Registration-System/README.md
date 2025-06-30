@@ -25,12 +25,6 @@ monbodb compass for database
 - 🚫 Remove students from courses
 
 
-## Installation
-
-1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/course-registration-system.git
-
 
 ## Screenshots
 ![interface elective course](https://github.com/user-attachments/assets/cdcf47cd-a824-4d6e-ba33-924b8306066b)
