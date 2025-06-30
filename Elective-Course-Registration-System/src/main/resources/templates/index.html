@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Course Registration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #121212;
+            min-height: 100vh;
+            color: #e0e0e0;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Top Navigation Bar */
+        .top-navbar {
+            background: #1e1e1e;
+            border-bottom: 1px solid #333;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #4fc3f7;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        #welcomeUser {
+            font-size: 16px;
+            font-weight: 600;
+            color: #e0e0e0;
+        }
+
+        .logout-btn {
+            background: #4fc3f7;
+            color: #121212;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .logout-btn:hover {
+            background: #29b6f6;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(79, 195, 247, 0.3);
+        }
+
+        /* Main Layout */
+        .main-container {
+            display: flex;
+            margin-top: 70px;
+            min-height: calc(100vh - 70px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: #1e1e1e;
+            border-right: 1px solid #333;
+            padding: 20px 0;
+            position: fixed;
+            left: 0;
+            top: 70px;
+            bottom: 0;
+            overflow-y: auto;
+        }
+
+        .sidebar-section {
+            padding: 0 20px;
+            margin-bottom: 30px;
+        }
+
+        .sidebar-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #757575;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            margin-bottom: 5px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            color: #e0e0e0;
+        }
+
+        .sidebar-item:hover {
+            background: #333;
+        }
+
+        .sidebar-item.active {
+            background: #4fc3f7;
+            color: #121212;
+            font-weight: 600;
+        }
+
+        .sidebar-item-icon {
+            margin-right: 12px;
+            font-size: 16px;
+        }
+
+        /* Content Area */
+        .content-area {
+            margin-left: 280px;
+            flex: 1;
+            padding: 30px;
+            background: #121212;
+        }
+
+        .content-header {
+            margin-bottom: 30px;
+        }
+
+        .content-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #4fc3f7;
+            margin-bottom: 10px;
+        }
+
+        .content-subtitle {
+            font-size: 16px;
+            color: #9e9e9e;
+        }
+
+        /* Auth Container */
+        .auth-container {
+            display: flex;
+            min-height: 100vh;
+            background: #121212;
+        }
+
+        .auth-content-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 40px auto;
+            display: flex;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .info-section {
+            flex: 1;
+            padding: 60px;
+            background: linear-gradient(135deg, #1a237e, #0d47a1);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .info-section h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .info-section p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .features {
+            margin-top: 30px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .feature-icon {
+            font-size: 1.5rem;
+            margin-right: 15px;
+            color: #4fc3f7;
+        }
+
+        .forms-section {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            background: #1e1e1e;
+        }
+
+        .form-box {
+            width: 100%;
+            max-width: 400px;
+            background: #2d2d2d;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-box h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #4fc3f7;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #444;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            background: #333;
+            color: #e0e0e0;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #4fc3f7;
+            box-shadow: 0 0 0 2px rgba(79, 195, 247, 0.3);
+        }
+
+        .form-input::placeholder {
+            color: #9e9e9e;
+        }
+
+        .form-button {
+            width: 100%;
+            background: #4fc3f7;
+            color: #121212;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .form-button:hover {
+            background: #29b6f6;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(79, 195, 247, 0.3);
+        }
+
+        .form-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #9e9e9e;
+        }
+
+        .form-link a {
+            color: #4fc3f7;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .form-link a:hover {
+            text-decoration: underline;
+        }
+
+        .login-type-toggle {
+            display: flex;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #444;
+        }
+
+        .login-type-btn {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            background: #333;
+            transition: all 0.2s ease;
+            color: #e0e0e0;
+        }
+
+        .login-type-btn.active {
+            background: #4fc3f7;
+            color: #121212;
+            font-weight: 600;
+        }
+
+        /* Course Cards */
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .course-card {
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 25px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border-color: #4fc3f7;
+        }
+
+        .course-code {
+            font-size: 18px;
+            font-weight: 700;
+            color: #4fc3f7;
+            margin-bottom: 8px;
+        }
+
+        .course-name {
+            font-size: 16px;
+            color: #e0e0e0;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .course-description {
+            font-size: 14px;
+            color: #9e9e9e;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .seats-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 12px;
+            background: #333;
+            border-radius: 8px;
+            border-left: 4px solid #4fc3f7;
+        }
+
+        .seats-available {
+            font-weight: 600;
+            color: #81c784;
+        }
+
+        .seats-full {
+            color: #e57373;
+            font-weight: 600;
+        }
+
+        .course-button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .course-button.available {
+            background: #4fc3f7;
+            color: #121212;
+        }
+
+        .course-button.available:hover {
+            background: #29b6f6;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(79, 195, 247, 0.3);
+        }
+
+        .course-button.unavailable {
+            background: #333;
+            color: #9e9e9e;
+            cursor: not-allowed;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #9e9e9e;
+        }
+
+        .empty-state h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #e0e0e0;
+        }
+
+        .enrolled-badge {
+            text-align: center;
+            padding: 12px;
+            background: rgba(129, 199, 132, 0.2);
+            border: 1px solid #81c784;
+            border-radius: 8px;
+            color: #81c784;
+            font-weight: 600;
+        }
+
+        /* Admin Specific Styles */
+        .admin-dashboard {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .admin-section {
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .admin-section-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #4fc3f7;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        .admin-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .admin-form .form-group {
+            margin-bottom: 0;
+        }
+
+        .admin-form-button {
+            grid-column: span 2;
+        }
+
+        .user-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .user-table th, .user-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+        .user-table th {
+            background-color: #1e1e1e;
+            font-weight: 600;
+            color: #4fc3f7;
+        }
+
+        .user-table tr:hover {
+            background-color: #333;
+        }
+
+        .action-button {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .action-button.delete {
+            background-color: #e57373;
+            color: white;
+        }
+
+        .action-button.delete:hover {
+            background-color: #ef5350;
+            box-shadow: 0 2px 8px rgba(239, 83, 80, 0.3);
+        }
+
+        .action-button.view {
+            background-color: #64b5f6;
+            color: white;
+            margin-right: 5px;
+        }
+
+        .action-button.view:hover {
+            background-color: #42a5f5;
+            box-shadow: 0 2px 8px rgba(66, 165, 245, 0.3);
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #333;
+            border-top: 2px solid #4fc3f7;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .auth-content-container {
+                flex-direction: column;
+                margin: 20px auto;
+                width: 95%;
+            }
+
+            .info-section {
+                padding: 40px 20px;
+                text-align: center;
+            }
+
+            .forms-section {
+                padding: 20px;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: relative;
+                top: 0;
+                height: auto;
+            }
+
+            .content-area {
+                margin-left: 0;
+            }
+
+            .main-container {
+                flex-direction: column;
+            }
+
+            .course-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-form {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-form-button {
+                grid-column: span 1;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .form-box {
+                padding: 30px 20px;
+            }
+
+            .content-area {
+                padding: 20px 15px;
+            }
+
+            .course-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Top Navigation Bar -->
+<div id="top-navbar" class="top-navbar hidden">
+    <div class="logo">Course Registration</div>
+    <div class="user-section">
+        <span id="welcomeUser">Hi, User</span>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+</div>
+
+<!-- Main Container -->
+<div id="main-layout" class="main-container hidden">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-section">
+            <div class="sidebar-title">Navigation</div>
+            <div class="sidebar-item active" onclick="showSection('available')">
+                <span class="sidebar-item-icon">📚</span>
+                <span>Available Courses</span>
+            </div>
+            <div class="sidebar-item" onclick="showSection('opted')">
+                <span class="sidebar-item-icon">✅</span>
+                <span>Opted Courses</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Area -->
+    <div class="content-area">
+        <!-- Available Courses Section -->
+        <div id="available-section">
+            <div class="content-header">
+                <div class="content-title">Available Elective Courses</div>
+                <div class="content-subtitle">Browse and enroll in elective courses</div>
+            </div>
+            <div class="course-grid" id="courseCards">
+                <div class="loading"></div>
+            </div>
+        </div>
+
+        <!-- Opted Courses Section -->
+        <div id="opted-section" class="hidden">
+            <div class="content-header">
+                <div class="content-title">Your Selected Course</div>
+                <div class="content-subtitle">Manage your enrolled course</div>
+            </div>
+            <div class="course-grid" id="optedCards">
+                <div class="loading"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Admin Dashboard -->
+<div id="admin-dashboard" class="main-container hidden">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-section">
+            <div class="sidebar-title">Admin Panel</div>
+            <div class="sidebar-item active" onclick="showAdminSection('courses')">
+                <span class="sidebar-item-icon">📚</span>
+                <span>Manage Courses</span>
+            </div>
+            <div class="sidebar-item" onclick="showAdminSection('enrollments')">
+                <span class="sidebar-item-icon">👥</span>
+                <span>Course Enrollments</span>
+            </div>
+            <div class="sidebar-item" onclick="showAdminSection('users')">
+                <span class="sidebar-item-icon">👤</span>
+                <span>User Management</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Area -->
+    <div class="content-area">
+        <!-- Manage Courses Section -->
+        <div id="admin-courses-section">
+            <div class="content-header">
+                <div class="content-title">Manage Courses</div>
+                <div class="content-subtitle">Add, edit or remove available courses</div>
+            </div>
+
+            <div class="admin-dashboard">
+                <div class="admin-section">
+                    <div class="admin-section-title">Add New Course</div>
+                    <form id="add-course-form" class="admin-form">
+                        <div class="form-group">
+                            <input type="text" id="course-code" class="form-input" placeholder="Course Code" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="course-name" class="form-input" placeholder="Course Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="course-description" class="form-input" placeholder="Description">
+                        </div>
+                        <div class="form-group">
+                            <input type="number" id="course-seats" class="form-input" placeholder="Available Seats" required>
+                        </div>
+                        <button type="submit" class="form-button admin-form-button">Add Course</button>
+                    </form>
+                </div>
+
+                <div class="admin-section">
+                    <div class="admin-section-title">Current Courses</div>
+                    <div class="course-grid" id="admin-course-cards">
+                        <div class="loading"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Course Enrollments Section -->
+        <div id="admin-enrollments-section" class="hidden">
+            <div class="content-header">
+                <div class="content-title">Course Enrollments</div>
+                <div class="content-subtitle">View and manage student enrollments</div>
+            </div>
+
+            <div class="admin-dashboard">
+                <div class="admin-section">
+                    <div class="admin-section-title">Select Course</div>
+                    <select id="enrollment-course-select" class="form-input" onchange="loadCourseEnrollments()">
+                        <option value="">-- Select a course --</option>
+                    </select>
+                </div>
+
+                <div class="admin-section">
+                    <div class="admin-section-title">Enrolled Students</div>
+                    <div id="enrolled-students-container">
+                        <div class="empty-state">
+                            <h3>No Course Selected</h3>
+                            <p>Please select a course to view enrolled students.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Management Section -->
+        <div id="admin-users-section" class="hidden">
+            <div class="content-header">
+                <div class="content-title">User Management</div>
+                <div class="content-subtitle">View and manage all registered users</div>
+            </div>
+
+            <div class="admin-dashboard">
+                <div class="admin-section">
+                    <div class="admin-section-title">All Users</div>
+                    <div id="users-table-container">
+                        <table class="user-table">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Enrolled Course</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody id="users-table-body">
+                            <tr>
+                                <td colspan="4" style="text-align: center;">
+                                    <div class="loading"></div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Auth Forms Container -->
+<div id="auth-container" class="auth-container">
+    <div class="auth-content-container">
+        <!-- Info Section -->
+        <div class="info-section">
+            <h1>Welcome to Course Registration</h1>
+            <p>Register for your elective courses with ease. Our platform helps you browse available courses, enroll in your preferred options, and manage your selections.</p>
+
+            <div class="features">
+                <div class="feature-item">
+                    <span class="feature-icon">📚</span>
+                    <span>Browse available courses</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✅</span>
+                    <span>Easy enrollment process</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">👨‍🎓</span>
+                    <span>Track your selected courses</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Forms Section -->
+        <div class="forms-section">
+            <!-- Registration Form -->
+            <div id="registration-form" class="form-box">
+                <h2>Create Account</h2>
+                <div class="form-group">
+                    <input type="text" id="reg-name" class="form-input" placeholder="Full Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="reg-email" class="form-input" placeholder="Email Address" required>
+                </div>
+                <button class="form-button" onclick="registerStudent()">Create Account</button>
+                <div class="form-link">
+                    <p>Already have an account? <a href="#" onclick="toggleForms('login')">Sign in here</a></p>
+                </div>
+            </div>
+
+            <!-- Login Form -->
+            <div id="login-form" class="form-box hidden">
+                <h2>Welcome Back</h2>
+                <div class="login-type-toggle">
+                    <div class="login-type-btn active" id="student-login-btn" onclick="toggleLoginType('student')">Student Login</div>
+                    <div class="login-type-btn" id="admin-login-btn" onclick="toggleLoginType('admin')">Admin Login</div>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="login-email" class="form-input" placeholder="Email Address" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="login-password" class="form-input" placeholder="Password" required>
+                </div>
+                <button class="form-button" onclick="login()">Sign In</button>
+                <div class="form-link">
+                    <p>Don't have an account? <a href="#" onclick="toggleForms('register')">Create one here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const BASE_URL = "http://localhost:8080";
+    let isAdminLogin = false;
+
+    // Check if user is already logged in on page load
+    window.addEventListener('DOMContentLoaded', function() {
+        const studentEmail = sessionStorage.getItem("studentEmail");
+        const studentName = sessionStorage.getItem("studentName");
+        const adminLoggedIn = sessionStorage.getItem("adminLoggedIn");
+
+        if (studentEmail && studentName) {
+            showLoggedInInterface(studentName);
+        } else if (adminLoggedIn) {
+            showAdminInterface();
+        }
+    });
+
+    function toggleLoginType(type) {
+        isAdminLogin = type === 'admin';
+        document.getElementById('student-login-btn').classList.toggle('active', type === 'student');
+        document.getElementById('admin-login-btn').classList.toggle('active', type === 'admin');
+
+        // Update placeholder text
+        const emailInput = document.getElementById('login-email');
+        emailInput.placeholder = type === 'admin' ? 'Admin Username' : 'Email Address';
+    }
+
+    function showLoggedInInterface(studentName) {
+        document.getElementById('auth-container').classList.add('hidden');
+        document.getElementById('top-navbar').classList.remove('hidden');
+        document.getElementById('main-layout').classList.remove('hidden');
+        document.getElementById('admin-dashboard').classList.add('hidden');
+        document.getElementById('welcomeUser').innerText = `Hi, ${studentName}`;
+        showSection('available');
+    }
+
+    function showAdminInterface() {
+        document.getElementById('auth-container').classList.add('hidden');
+        document.getElementById('top-navbar').classList.remove('hidden');
+        document.getElementById('main-layout').classList.add('hidden');
+        document.getElementById('admin-dashboard').classList.remove('hidden');
+        document.getElementById('welcomeUser').innerText = `Hi, Admin`;
+        showAdminSection('courses');
+        loadAdminCourses();
+        loadAllUsers();
+        populateCourseSelect();
+    }
+
+    function toggleForms(mode) {
+        if (mode === 'login') {
+            document.getElementById('registration-form').classList.add('hidden');
+            document.getElementById('login-form').classList.remove('hidden');
+        } else {
+            document.getElementById('login-form').classList.add('hidden');
+            document.getElementById('registration-form').classList.remove('hidden');
+        }
+    }
+
+    function logout() {
+        sessionStorage.clear();
+        document.getElementById('top-navbar').classList.add('hidden');
+        document.getElementById('main-layout').classList.add('hidden');
+        document.getElementById('admin-dashboard').classList.add('hidden');
+        document.getElementById('auth-container').classList.remove('hidden');
+        document.getElementById('registration-form').classList.remove('hidden');
+        document.getElementById('login-form').classList.add('hidden');
+        isAdminLogin = false;
+
+        // Clear form inputs
+        document.getElementById('login-email').value = '';
+        document.getElementById('login-password').value = '';
+    }
+
+    function showSection(type) {
+        // Update sidebar active state
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.classList.remove('active');
+        });
+
+        if (type === 'available') {
+            document.getElementById('available-section').classList.remove('hidden');
+            document.getElementById('opted-section').classList.add('hidden');
+            document.querySelectorAll('.sidebar-item')[0].classList.add('active');
+            loadCourses();
+        } else {
+            document.getElementById('available-section').classList.add('hidden');
+            document.getElementById('opted-section').classList.remove('hidden');
+            document.querySelectorAll('.sidebar-item')[1].classList.add('active');
+            loadOptedCourse();
+        }
+    }
+
+    function showAdminSection(type) {
+        // Update sidebar active state
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.classList.remove('active');
+        });
+
+        document.getElementById('admin-courses-section').classList.add('hidden');
+        document.getElementById('admin-enrollments-section').classList.add('hidden');
+        document.getElementById('admin-users-section').classList.add('hidden');
+
+        if (type === 'courses') {
+            document.getElementById('admin-courses-section').classList.remove('hidden');
+            document.querySelectorAll('.sidebar-item')[0].classList.add('active');
+        } else if (type === 'enrollments') {
+            document.getElementById('admin-enrollments-section').classList.remove('hidden');
+            document.querySelectorAll('.sidebar-item')[1].classList.add('active');
+        } else if (type === 'users') {
+            document.getElementById('admin-users-section').classList.remove('hidden');
+            document.querySelectorAll('.sidebar-item')[2].classList.add('active');
+        }
+    }
+
+    async function registerStudent() {
+        const name = document.getElementById('reg-name').value.trim();
+        const email = document.getElementById('reg-email').value.trim();
+
+        if (!name || !email) {
+            alert("Please enter both name and email.");
+            return;
+        }
+
+        const button = event.target;
+        const originalText = button.textContent;
+        button.innerHTML = '<div class="loading"></div>';
+        button.disabled = true;
+
+        try {
+            const res = await fetch(`${BASE_URL}/register-student`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email })
+            });
+
+            if (res.ok) {
+                alert("Registered successfully! Check your email for the password.");
+                toggleForms('login');
+                document.getElementById('reg-name').value = '';
+                document.getElementById('reg-email').value = '';
+            } else {
+                alert("Registration failed. Please try again.");
+            }
+        } catch (error) {
+            alert("Network error. Please check your connection.");
+        } finally {
+            button.textContent = originalText;
+            button.disabled = false;
+        }
+    }
+
+    async function login() {
+        const email = document.getElementById('login-email').value.trim();
+        const password = document.getElementById('login-password').value.trim();
+
+        if (!email || !password) {
+            alert("Please enter both email and password.");
+            return;
+        }
+
+        const button = event.target;
+        const originalText = button.textContent;
+        button.innerHTML = '<div class="loading"></div>';
+        button.disabled = true;
+
+        try {
+            if (isAdminLogin) {
+                // Admin login (hardcoded for demo)
+                if (email === 'admin' && password === 'admin') {
+                    sessionStorage.setItem("adminLoggedIn", "true");
+                    showAdminInterface();
+                } else {
+                    alert("Invalid admin credentials");
+                }
+            } else {
+                // Student login
+                const res = await fetch(`${BASE_URL}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                if (res.ok) {
+                    const student = await res.json();
+                    sessionStorage.setItem("studentEmail", student.email);
+                    sessionStorage.setItem("studentName", student.name);
+                    showLoggedInInterface(student.name);
+                } else {
+                    const err = await res.json();
+                    alert(err.error || "Login failed. Please check your credentials.");
+                }
+            }
+        } catch (error) {
+            alert("Network error. Please check your connection.");
+        } finally {
+            button.textContent = originalText;
+            button.disabled = false;
+        }
+    }
+
+    async function loadCourses() {
+        const container = document.getElementById("courseCards");
+        container.innerHTML = '<div class="loading"></div>';
+
+        try {
+            const res = await fetch(`${BASE_URL}/courses`);
+            const courses = await res.json();
+
+            container.innerHTML = "";
+
+            if (courses.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h3>No Courses Available</h3>
+                        <p>There are currently no elective courses available for registration.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            courses.forEach(course => {
+                const card = document.createElement("div");
+                card.className = "course-card";
+
+                const isAvailable = course.seatsAvailable > 0;
+                const buttonClass = isAvailable ? 'available' : 'unavailable';
+                const buttonText = isAvailable ? 'Enroll Now' : 'Course Full';
+                const buttonAction = isAvailable ? `chooseCourse('${course.courseCode}')` : '';
+
+                card.innerHTML = `
+                    <div class="course-code">${course.courseCode}</div>
+                    <div class="course-name">${course.courseName}</div>
+                    <div class="course-description">${course.description || 'Enhance your skills with this comprehensive elective course designed to provide practical knowledge and industry-relevant expertise.'}</div>
+                    <div class="seats-info">
+                        <span class="${isAvailable ? 'seats-available' : 'seats-full'}">
+                            ${isAvailable ? `${course.seatsAvailable} seats available` : 'No seats available'}
+                        </span>
+                    </div>
+                    <button class="course-button ${buttonClass}"
+                            ${isAvailable ? `onclick="${buttonAction}"` : 'disabled'}>
+                        ${buttonText}
+                    </button>
+                `;
+                container.appendChild(card);
+            });
+        } catch (error) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <h3>Error Loading Courses</h3>
+                    <p>Unable to load courses. Please try again later.</p>
+                </div>
+            `;
+        }
+    }
+
+    async function chooseCourse(courseCode) {
+        const email = sessionStorage.getItem("studentEmail");
+
+        if (!email) {
+            alert("Session expired. Please login again.");
+            logout();
+            return;
+        }
+
+        try {
+            const res = await fetch(`${BASE_URL}/register-course`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, courseCode })
+            });
+
+            const result = await res.json();
+            if (res.ok) {
+                alert(result.message);
+                loadCourses();
+                loadOptedCourse();
+            } else {
+                alert(result.error);
+            }
+        } catch (error) {
+            alert("Network error. Please try again.");
+        }
+    }
+
+    async function loadOptedCourse() {
+        const email = sessionStorage.getItem("studentEmail");
+        const container = document.getElementById("optedCards");
+        container.innerHTML = '<div class="loading"></div>';
+
+        if (!email) {
+            alert("Session expired. Please login again.");
+            logout();
+            return;
+        }
+
+        try {
+            const res = await fetch(`${BASE_URL}/student?email=${email}`);
+            const student = await res.json();
+
+            container.innerHTML = "";
+
+            if (student.selectedCourse) {
+                const res2 = await fetch(`${BASE_URL}/courses`);
+                const allCourses = await res2.json();
+                const course = allCourses.find(c => c.courseCode === student.selectedCourse);
+
+                if (course) {
+                    const card = document.createElement("div");
+                    card.className = "course-card";
+                    card.innerHTML = `
+                        <div class="course-code">${course.courseCode}</div>
+                        <div class="course-name">${course.courseName}</div>
+                        <div class="course-description">${course.description || 'You have successfully enrolled in this course. Check your email for further instructions.'}</div>
+                        <div class="seats-info">
+                            <span class="seats-available">
+                                ${course.seatsAvailable} seats remaining
+                            </span>
+                        </div>
+                        <div class="enrolled-badge">
+                            ✓ Enrolled Successfully
+                        </div>
+                    `;
+                    container.appendChild(card);
+                } else {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <h3>Course Not Found</h3>
+                            <p>The selected course is no longer available in the system.</p>
+                        </div>
+                    `;
+                }
+            } else {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h3>No Course Selected</h3>
+                        <p>You haven't enrolled in any elective course yet. Browse available courses to get started.</p>
+                    </div>
+                `;
+            }
+        } catch (error) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <h3>Error Loading Data</h3>
+                    <p>Unable to load your course information. Please try again later.</p>
+                </div>
+            `;
+        }
+    }
+
+    // Admin Functions
+    async function loadAdminCourses() {
+        const container = document.getElementById("admin-course-cards");
+        container.innerHTML = '<div class="loading"></div>';
+
+        try {
+            const res = await fetch(`${BASE_URL}/courses`);
+            const courses = await res.json();
+
+            container.innerHTML = "";
+
+            if (courses.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h3>No Courses Available</h3>
+                        <p>There are currently no courses in the system.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            courses.forEach(course => {
+                const card = document.createElement("div");
+                card.className = "course-card";
+                card.innerHTML = `
+                    <div class="course-code">${course.courseCode}</div>
+                    <div class="course-name">${course.courseName}</div>
+                    <div class="course-description">${course.description || 'No description provided.'}</div>
+                    <div class="seats-info">
+                        <span class="${course.seatsAvailable > 0 ? 'seats-available' : 'seats-full'}">
+                            ${course.seatsAvailable > 0 ? `${course.seatsAvailable} seats available` : 'No seats available'}
+                        </span>
+                    </div>
+                    <button class="course-button available" onclick="deleteCourse('${course.courseCode}')">
+                        Delete Course
+                    </button>
+                `;
+                container.appendChild(card);
+            });
+        } catch (error) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <h3>Error Loading Courses</h3>
+                    <p>Unable to load courses. Please try again later.</p>
+                </div>
+            `;
+        }
+    }
+
+    async function deleteCourse(courseCode) {
+        if (!confirm(`Are you sure you want to delete course ${courseCode}? This will also remove all enrollments.`)) {
+            return;
+        }
+
+        try {
+            const res = await fetch(`${BASE_URL}/courses/${courseCode}`, {
+                method: 'DELETE'
+            });
+
+            if (res.ok) {
+                alert("Course deleted successfully");
+                loadAdminCourses();
+                populateCourseSelect();
+            } else {
+                const err = await res.json();
+                alert(err.error || "Failed to delete course");
+            }
+        } catch (error) {
+            alert("Network error. Please try again.");
+        }
+    }
+
+    async function populateCourseSelect() {
+        const select = document.getElementById("enrollment-course-select");
+        select.innerHTML = '<option value="">-- Select a course --</option>';
+
+        try {
+            const res = await fetch(`${BASE_URL}/courses`);
+            const courses = await res.json();
+
+            courses.forEach(course => {
+                const option = document.createElement("option");
+                option.value = course.courseCode;
+                option.textContent = `${course.courseCode} - ${course.courseName}`;
+                select.appendChild(option);
+            });
+        } catch (error) {
+            console.error("Error loading courses:", error);
+        }
+    }
+
+    async function loadCourseEnrollments() {
+        const courseCode = document.getElementById("enrollment-course-select").value;
+        const container = document.getElementById("enrolled-students-container");
+
+        if (!courseCode) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <h3>No Course Selected</h3>
+                    <p>Please select a course to view enrolled students.</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = '<div class="loading"></div>';
+
+        try {
+            const res = await fetch(`${BASE_URL}/course-enrollments?courseCode=${courseCode}`);
+            const enrollments = await res.json();
+
+            if (enrollments.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h3>No Enrollments</h3>
+                        <p>No students have enrolled in this course yet.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = `
+                <table class="user-table">
+                    <thead>
+                        <tr>
+                            <th>Student Name</th>
+                            <th>Email</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            enrollments.forEach(student => {
+                html += `
+                    <tr>
+                        <td>${student.name}</td>
+                        <td>${student.email}</td>
+                        <td>
+                            <button class="action-button delete" onclick="removeFromCourse('${courseCode}', '${student.email}')">
+                                Remove
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                    </tbody>
+                </table>
+            `;
+
+            container.innerHTML = html;
+        } catch (error) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <h3>Error Loading Enrollments</h3>
+                    <p>Unable to load student enrollments. Please try again later.</p>
+                </div>
+            `;
+        }
+    }
+
+    async function removeFromCourse(courseCode, studentEmail) {
+        if (!confirm(`Are you sure you want to remove this student from the course?`)) {
+            return;
+        }
+
+        try {
+            const res = await fetch(`${BASE_URL}/remove-enrollment`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ courseCode, studentEmail })
+            });
+
+            if (res.ok) {
+                alert("Student removed from course successfully");
+                loadCourseEnrollments();
+            } else {
+                const err = await res.json();
+                alert(err.error || "Failed to remove student from course");
+            }
+        } catch (error) {
+            alert("Network error. Please try again.");
+        }
+    }
+
+    async function loadAllUsers() {
+        const container = document.getElementById("users-table-body");
+        container.innerHTML = '<tr><td colspan="4" style="text-align: center;"><div class="loading"></div></td></tr>';
+
+        try {
+            const res = await fetch(`${BASE_URL}/students`);
+            const students = await res.json();
+
+            container.innerHTML = "";
+
+            if (students.length === 0) {
+                container.innerHTML = `
+                    <tr>
+                        <td colspan="4" style="text-align: center;">
+                            <div class="empty-state">
+                                <h3>No Users Found</h3>
+                                <p>There are currently no registered users in the system.</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            students.forEach(student => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${student.name}</td>
+                    <td>${student.email}</td>
+                    <td>${student.selectedCourse || 'None'}</td>
+                    <td>
+                        <button class="action-button view" onclick="viewUserDetails('${student.email}')">
+                            View
+                        </button>
+                        <button class="action-button delete" onclick="deleteUser('${student.email}')">
+                            Delete
+                        </button>
+                    </td>
+                `;
+                container.appendChild(row);
+            });
+        } catch (error) {
+            container.innerHTML = `
+                <tr>
+                    <td colspan="4" style="text-align: center;">
+                        <div class="empty-state">
+                            <h3>Error Loading Users</h3>
+                            <p>Unable to load user data. Please try again later.</p>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }
+    }
+
+    function viewUserDetails(email) {
+        alert(`View details for user: ${email}\nThis would show more detailed user information in a real application.`);
+    }
+
+    async function deleteUser(email) {
+        if (!confirm(`Are you sure you want to delete user ${email}? This action cannot be undone.`)) {
+            return;
+        }
+
+        try {
+            const res = await fetch(`${BASE_URL}/students/${email}`, {
+                method: 'DELETE'
+            });
+
+            if (res.ok) {
+                alert("User deleted successfully");
+                loadAllUsers();
+            } else {
+                const err = await res.json();
+                alert(err.error || "Failed to delete user");
+            }
+        } catch (error) {
+            alert("Network error. Please try again.");
+        }
+    }
+
+    // Handle add course form submission
+    document.getElementById('add-course-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const courseCode = document.getElementById('course-code').value.trim();
+        const courseName = document.getElementById('course-name').value.trim();
+        const description = document.getElementById('course-description').value.trim();
+        const seats = document.getElementById('course-seats').value.trim();
+
+        if (!courseCode || !courseName || !seats) {
+            alert("Please fill in all required fields");
+            return;
+        }
+
+        const button = this.querySelector('button[type="submit"]');
+        const originalText = button.textContent;
+        button.innerHTML = '<div class="loading"></div>';
+        button.disabled = true;
+
+        try {
+            const res = await fetch(`${BASE_URL}/courses`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    courseCode,
+                    courseName,
+                    description,
+                    seatsAvailable: parseInt(seats)
+                })
+            });
+
+            if (res.ok) {
+                alert("Course added successfully");
+                this.reset();
+                loadAdminCourses();
+                populateCourseSelect();
+            } else {
+                const err = await res.json();
+                alert(err.error || "Failed to add course");
+            }
+        } catch (error) {
+            alert("Network error. Please try again.");
+        } finally {
+            button.textContent = originalText;
+            button.disabled = false;
+        }
+    });
+</script>
+</body>
+</html>
