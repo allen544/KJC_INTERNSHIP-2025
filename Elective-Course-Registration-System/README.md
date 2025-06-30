@@ -1,7 +1,7 @@
 # Course Registration System
 
-![Project Preview](              ![interface elective course](https://github.com/user-attachments/assets/3b953c2d-88f6-4319-9950-2d5457d76f3a)
-                  )
+![Project Preview]           ![interface elective course](https://github.com/user-attachments/assets/3b953c2d-88f6-4319-9950-2d5457d76f3a)
+                  
 
 A modern web application for managing course registrations with student and admin interfaces, built with HTML, CSS, and JavaScript.
 used java for backend logic and working
