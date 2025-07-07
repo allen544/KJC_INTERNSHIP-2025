@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Registration</title>
+    <style>
+        body {
+          background-color: #111;
+          color: white;
+          font-family: Arial, sans-serif;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+        }
+
+        .form-box {
+          background-color: #1e1e1e;
+          padding: 30px;
+          border-radius: 10px;
+          box-shadow: 0 0 10px #f5c518;
+          width: 320px;
+        }
+
+        h2 {
+          color: #f5c518;
+          text-align: center;
+        }
+
+        input {
+          width: 100%;
+          padding: 10px;
+          margin-top: 10px;
+          border: none;
+          border-radius: 5px;
+          background-color: #333;
+          color: white;
+        }
+
+        button {
+          width: 100%;
+          padding: 10px;
+          margin-top: 15px;
+          background-color: #f5c518;
+          color: #111;
+          border: none;
+          border-radius: 5px;
+          font-weight: bold;
+          cursor: pointer;
+        }
+
+        button:hover {
+          background-color: #ffd700;
+        }
+    </style>
+</head>
+<body>
+<div class="form-box">
+    <h2>Register</h2>
+    <form method="POST" action="/register">
+        <input type="text" name="name" placeholder="Full Name" required />
+        <input type="email" name="email" placeholder="Email Address" required />
+        <button type="submit">Create Account</button>
+    </form>
+</div>
+</body>
+</html>
