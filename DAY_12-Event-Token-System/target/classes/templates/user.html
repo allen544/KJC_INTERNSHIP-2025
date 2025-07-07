@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Management Portal</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: #2c3e50;
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #34495e;
+        }
+
+        .sidebar-header h2 {
+            color: #f39c12;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .nav-menu {
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: #34495e;
+            border-left-color: #f39c12;
+            color: #f39c12;
+        }
+
+        .nav-item i {
+            margin-right: 10px;
+            width: 20px;
+        }
+
+        .logout-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: #e74c3c;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 250px;
+            flex: 1;
+            background: white;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: white;
+            padding: 20px 30px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f39c12;
+            padding: 8px 15px;
+            border-radius: 20px;
+            color: white;
+            font-weight: 600;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #2c3e50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        /* Event Cards */
+        .event-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 1px solid #e9ecef;
+        }
+
+        .event-card h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .event-card p {
+            color: #666;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .event-card button {
+            background: #f39c12;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: background 0.3s ease;
+        }
+
+        .event-card button:hover:not(:disabled) {
+            background: #e67e22;
+        }
+
+        .event-card button:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+
+        /* Profile Section */
+        .profile-card {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .profile-avatar-large {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #f39c12;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .profile-header h3 {
+            color: #2c3e50;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .info-row {
+            display: flex;
+            margin-bottom: 15px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f8f9fa;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #2c3e50;
+            width: 120px;
+            flex-shrink: 0;
+        }
+
+        .info-value {
+            color: #666;
+            flex: 1;
+        }
+
+        .security-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .security-section h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .reset-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: background 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            background: #c0392b;
+        }
+
+        /* Messages */
+        .message {
+            padding: 12px 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        /* Loading and Empty States */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-style: italic;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .header {
+                padding: 15px 20px;
+            }
+
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>Event Portal</h2>
+            <p>Management System</p>
+        </div>
+        <div class="nav-menu">
+            <a href="#" class="nav-item active" onclick="showSection('available-events')">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Available Events</span>
+            </a>
+            <a href="#" class="nav-item" onclick="showSection('booked-events')">
+                <i class="fas fa-ticket-alt"></i>
+                <span>My Bookings</span>
+            </a>
+            <a href="#" class="nav-item" onclick="showSection('profile')">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </a>
+        </div>
+        <button class="logout-btn" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header class="header">
+            <h1 id="section-title">Available Events</h1>
+            <div class="user-info">
+                <div class="user-avatar" id="header-avatar">U</div>
+                <div>
+                    <div>Hi, <span id="username">Loading...</span></div>
+                </div>
+            </div>
+        </header>
+
+        <div class="content">
+            <!-- Messages -->
+            <div id="messages"></div>
+
+            <!-- Available Events -->
+            <div id="available-events" class="content-section active">
+                <div id="events">
+                    <div class="loading">Loading events...</div>
+                </div>
+            </div>
+
+            <!-- Booked Events -->
+            <div id="booked-events" class="content-section">
+                <div id="bookings">
+                    <div class="loading">Loading bookings...</div>
+                </div>
+            </div>
+
+            <!-- Profile -->
+            <div id="profile" class="content-section">
+                <div class="profile-card">
+                    <div class="profile-header">
+                        <div class="profile-avatar-large" id="profile-avatar">U</div>
+                        <h3 id="profile-name">Loading...</h3>
+                        <p>Portal Member</p>
+                    </div>
+
+                    <div class="profile-info">
+                        <div class="info-row">
+                            <span class="info-label">Full Name:</span>
+                            <span class="info-value" id="profile-fullname">Loading...</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Email:</span>
+                            <span class="info-value" id="profile-email">Loading...</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Member Since:</span>
+                            <span class="info-value" id="profile-joined">Loading...</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Status:</span>
+                            <span class="info-value" style="color: #27ae60; font-weight: 600;">Verified</span>
+                        </div>
+                    </div>
+
+                    <div class="security-section">
+                        <h4>Security Settings</h4>
+                        <p>Update your password to keep your account secure.</p>
+                        <button class="reset-btn" onclick="resetPassword()">
+                            <i class="fas fa-key"></i> Reset Password
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Global variables
+    let currentUser = null;
+
+    // Navigation
+    function showSection(sectionId) {
+        document.querySelectorAll('.content-section').forEach(section => {
+            section.classList.remove('active');
+        });
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.classList.remove('active');
+        });
+
+        document.getElementById(sectionId).classList.add('active');
+        event.target.closest('.nav-item').classList.add('active');
+
+        const titles = {
+            'available-events': 'Available Events',
+            'booked-events': 'My Bookings',
+            'profile': 'Profile'
+        };
+        document.getElementById('section-title').textContent = titles[sectionId];
+    }
+
+    // Logout
+    function logout() {
+        if (confirm('Are you sure you want to logout?')) {
+            document.cookie = 'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+            window.location.href = '/login.html';
+        }
+    }
+
+    // Password reset
+    function resetPassword() {
+        window.location.href = '/reset_password.html';
+    }
+
+    // Get cookie
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+        return null;
+    }
+
+    // Show message
+    function showMessage(message, type = 'error') {
+        const container = document.getElementById('messages');
+        const div = document.createElement('div');
+        div.className = `message ${type}`;
+        div.textContent = message;
+        container.appendChild(div);
+
+        setTimeout(() => {
+            if (div.parentNode) {
+                div.parentNode.removeChild(div);
+            }
+        }, 5000);
+    }
+
+    // Load user profile
+    async function loadUserProfile() {
+    try {
+        const token = getCookie('jwt');
+        if (!token) throw new Error('No authentication token');
+
+        const response = await fetch('/api/user/profile', {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) throw new Error('Failed to load profile');
+
+        const user = await response.json();
+        updateUserInterface(user);
+    } catch (error) {
+        console.error('Profile load error:', error);
+        // Fallback to token parsing
+        try {
+            const token = getCookie('jwt');
+            if (token) {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                const fallbackUser = {
+                    name: payload.name || 'User',
+                    email: payload.sub || 'user@example.com', // FIXED: Use payload.sub (the subject field contains the email)
+                    memberSince: payload.createdAt ? new Date(payload.createdAt).toISOString() : new Date().toISOString()
+                };
+                updateUserInterface(fallbackUser);
+            }
+        } catch (e) {
+            updateUserInterface({
+                name: 'User',
+                email: 'user@example.com'
+            });
+        }
+    }
+}
+
+    // Update user interface
+    function updateUserInterface(user) {
+        const firstName = user.name.split(' ')[0];
+        const firstLetter = firstName.charAt(0).toUpperCase();
+
+        document.getElementById('username').textContent = firstName;
+        document.getElementById('profile-name').textContent = user.name;
+        document.getElementById('profile-fullname').textContent = user.name;
+        document.getElementById('profile-email').textContent = user.email;
+        document.getElementById('profile-joined').textContent =
+            user.memberSince ? new Date(user.memberSince).toLocaleDateString() : 'N/A';
+
+        document.getElementById('profile-avatar').textContent = firstLetter;
+        document.getElementById('header-avatar').textContent = firstLetter;
+    }
+
+    // Load events
+    async function loadEvents() {
+        const container = document.getElementById('events');
+
+        try {
+            const response = await fetch('/events');
+            if (!response.ok) {
+                throw new Error('Failed to load events');
+            }
+
+            const events = await response.json();
+
+            if (!events || events.length === 0) {
+                container.innerHTML = '<div class="no-data">No events available</div>';
+                return;
+            }
+
+            container.innerHTML = events.map(event => `
+                <div class="event-card">
+                    <h3>${event.name}</h3>
+                    <p><strong>Description:</strong> ${event.description || 'N/A'}</p>
+                    <p><strong>Location:</strong> ${event.location}</p>
+                    <p><strong>Date:</strong> ${new Date(event.time).toLocaleString()}</p>
+                    <p><strong>Available:</strong> ${event.tokenLimit} slots</p>
+                    <button onclick="bookEvent('${event.id}', this)"
+                            ${event.tokenLimit <= 0 ? 'disabled' : ''}>
+                        ${event.tokenLimit <= 0 ? 'Sold Out' : 'Book Now'}
+                    </button>
+                </div>
+            `).join('');
+        } catch (error) {
+            container.innerHTML = `<div class="message error">Error loading events: ${error.message}</div>`;
+        }
+    }
+
+    // Load bookings
+    async function loadBookings() {
+        const container = document.getElementById('bookings');
+
+        try {
+            const token = getCookie('jwt');
+            if (!token) {
+                throw new Error('Not authenticated');
+            }
+
+            const response = await fetch('/bookings', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to load bookings');
+            }
+
+            const bookings = await response.json();
+
+            if (!bookings || bookings.length === 0) {
+                container.innerHTML = '<div class="no-data">No bookings yet</div>';
+                return;
+            }
+
+            container.innerHTML = bookings.map(booking => `
+                <div class="event-card">
+                    <h3>${booking.eventName}</h3>
+                    <p><strong>Location:</strong> ${booking.eventLocation}</p>
+                    <p><strong>Event Time:</strong> ${new Date(booking.eventTime).toLocaleString()}</p>
+                    <p><strong>Your Token:</strong> <code style="background: #f39c12; color: white; padding: 4px 8px; border-radius: 3px;">${booking.token}</code></p>
+                    <p><strong>Booked:</strong> ${new Date(booking.bookingTime).toLocaleString()}</p>
+                </div>
+            `).join('');
+        } catch (error) {
+            container.innerHTML = `<div class="message error">Error loading bookings: ${error.message}</div>`;
+        }
+    }
+
+    // Book event
+    async function bookEvent(eventId, buttonElement) {
+        try {
+            buttonElement.disabled = true;
+            buttonElement.textContent = 'Processing...';
+
+            const token = getCookie('jwt');
+            const response = await fetch(`/book/${eventId}`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                const error = await response.text();
+                throw new Error(error);
+            }
+
+            const result = await response.json();
+            showMessage(result.message || 'Booking successful!', 'success');
+
+            // Refresh data
+            await Promise.all([loadEvents(), loadBookings()]);
+        } catch (error) {
+            showMessage(`Booking failed: ${error.message}`, 'error');
+        } finally {
+            buttonElement.disabled = false;
+            buttonElement.textContent = 'Book Now';
+        }
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', async () => {
+        await loadUserProfile();
+        await loadEvents();
+        await loadBookings();
+    });
+
+    // API Endpoints for Backend Integration
+    const API_ENDPOINTS = {
+        USER_PROFILE: '/api/user/profile',
+        EVENTS: '/events',
+        BOOKINGS: '/bookings',
+        BOOK_EVENT: '/book/:eventId',
+        RESET_PASSWORD: '/api/auth/reset-password'
+    };
+
+    // Sample API request for user profile
+    async function fetchUserProfile() {
+        const token = getCookie('jwt');
+        const response = await fetch(API_ENDPOINTS.USER_PROFILE, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch user profile');
+        }
+
+        return await response.json();
+    }
+
+    // Export functions for testing
+    window.EventPortal = {
+        loadUserProfile,
+        loadEvents,
+        loadBookings,
+        bookEvent,
+        showMessage,
+        getCookie,
+        API_ENDPOINTS
+    };
+</script>
+</body>
+</html>
