@@ -1,4 +1,4 @@
-Its a Event Registration Syatem With Java as Backend and Html,css and javascript for Frontend
+Its a Event Registration System With Java as Backend and Html,css and javascript for Frontend
 
 
 #How to Run 
